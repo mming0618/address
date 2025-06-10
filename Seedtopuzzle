@@ -1,18 +1,1 @@
-import random
-import hashlib
-import base58
 
-for puzzle in range(1, 160):
-      lower = 2 ** (puzzle - 1)
-      upper = (2 ** puzzle) - 1
-      seed = "SatoshiNakamotoPuzzle" + str(puzzle)
-      random.seed(seed)
-      dec = random.randint(lower, upper)
-      private_key_hex = "%064x" %  dec
-      private_key_bytes = bytes.fromhex(private_key_hex)
-      extended_key = b'\x80' + private_key_bytes
-      extended_key += b'\x01'
-      checksum = hashlib.sha256(hashlib.sha256(extended_key).digest()).digest()[:4]
-      wif_bytes = extended_key + checksum
-      wif_compressed = base58.b58encode(wif_bytes).decode()
-      print(f"Puzzle = {puzzle} seed = {seed} wif = {wif_compressed}")
